@@ -1,48 +1,35 @@
 import { BrowserRouter, Route, Routes } from "react-router";
-import {
-  LandingPage,
-  Register,
-  Dashboard,
-  MyGroups,
-  NewGroups,
-} from "../views";
-import { Layout } from "./layout";
+import { LandingPage, SignUp, Dashboard, MyGroups, NewGroups } from "../views";
+import { ProtectedView } from "./protected-view";
 
 export const Router = () => {
   return (
     <BrowserRouter basename="hiveapp">
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route
-          path="/register"
-          element={
-            <Layout>
-              <Register />
-            </Layout>
-          }
-        />
+        <Route path="/sign-up" element={<SignUp />} />
         <Route
           path="/dashboard"
           element={
-            <Layout authenticated>
+            <ProtectedView>
               <Dashboard />
-            </Layout>
+            </ProtectedView>
           }
         />
         <Route
           path="/my-groups"
           element={
-            <Layout authenticated>
+            <ProtectedView>
               <MyGroups />
-            </Layout>
+            </ProtectedView>
           }
         />
         <Route
           path="/new-groups"
           element={
-            <Layout authenticated>
+            <ProtectedView>
               <NewGroups />
-            </Layout>
+            </ProtectedView>
           }
         />
       </Routes>

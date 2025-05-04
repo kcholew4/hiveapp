@@ -14,34 +14,34 @@ import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import logo from "../assets/logo.svg";
-import { useCredentialsLogIn, useGoogleLogIn } from "../hooks";
+import { useCredentialsSignUp, useGoogleLogIn } from "../hooks";
 
-export const LandingPage = () => {
+export const SignUp = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { logIn, isLoading: isCredentialsLoading } = useCredentialsLogIn({
-    onSuccess: () => navigate("/dashboard"),
-    onInvalidCredentials: () =>
+  const { signUp, isLoading: isCredentialsLoading } = useCredentialsSignUp({
+    onSuccess: () => navigate("/profile-details"),
+    onEmailInUse: () =>
       toaster.create({
         type: "error",
-        description: "Invalid email or password",
+        description: "Email is already in use",
       }),
     onError: () =>
       toaster.create({
         type: "error",
-        description: "There was an error logging in",
+        description: "There was an error creating account",
       }),
   });
 
   const { logInWithGoogle, isLoading: isGoogleLoading } = useGoogleLogIn({
-    onSuccess: () => navigate("/dashboard"),
+    onSuccess: () => navigate("/profile-details"),
     onError: () =>
       toaster.create({
         type: "error",
-        description: "There was an error logging in",
+        description: "There was an error creating account",
       }),
   });
 
@@ -52,16 +52,16 @@ export const LandingPage = () => {
           HiveApp
         </Heading>
         <Image src={logo} w={20} h={20} mx="auto" my={4} />
-        <Heading size="lg">Login</Heading>
+        <Heading size="lg">Create an account</Heading>
         <Text>
-          Use your credentials to log in. Don't have an account?{" "}
-          <Link href="#">Create new account</Link>.
+          Enter your email and password to create new account. Already have an
+          account? <Link>Log In</Link>.
         </Text>
       </Box>
       <Form
         onSubmit={(e) => {
           e.preventDefault();
-          logIn(email, password);
+          signUp(email, password);
         }}
         mt={5}
       >
@@ -77,17 +77,9 @@ export const LandingPage = () => {
           mt={3}
         />
         <Button w="full" type="submit" mt={4} loading={isCredentialsLoading}>
-          Log In
+          Sign Up
         </Button>
       </Form>
-      <Button
-        variant="subtle"
-        w="full"
-        mt={4}
-        onClick={() => navigate("/sign-up")}
-      >
-        Create new account
-      </Button>
       <HStack my={5}>
         <Separator flex="1" />
         <Text flexShrink="0" color="fg.subtle">

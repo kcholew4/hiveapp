@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import PWABadge from "../PWABadge.tsx";
 import { Box, ChakraProvider, Flex } from "@chakra-ui/react";
 import { system } from "../theme/theme.ts";
+import { Toaster } from "./toaster.tsx";
 
 type ProviderProps = {
   children: ReactNode;
@@ -16,6 +17,7 @@ export const Provider = ({ children }: ProviderProps) => {
         </Box>
       </Flex>
       <PWABadge />
+      <Toaster />
     </ChakraProvider>
   );
 };

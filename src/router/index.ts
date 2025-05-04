@@ -1,2 +1,3 @@
 export * from "./router";
-export * from "./layout";
+export * from "./protected-view";
+export * from "./logged-in-layout";
