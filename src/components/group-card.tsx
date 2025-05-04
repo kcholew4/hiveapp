@@ -1,21 +1,28 @@
 import { Button, Card } from "@chakra-ui/react";
 
 type GroupCardProps = {
-  title: string;
+  name: string;
   description: string;
+  canEnter?: boolean;
 };
 
-export const GroupCard = ({ title, description }: GroupCardProps) => {
+export const GroupCard = ({ name, description, canEnter }: GroupCardProps) => {
   return (
     <Card.Root>
       <Card.Header>
-        <Card.Title>{title}</Card.Title>
+        <Card.Title>{name}</Card.Title>
       </Card.Header>
       <Card.Body>
         <Card.Description>{description}</Card.Description>
       </Card.Body>
       <Card.Footer>
-        <Button size="sm">Join group</Button>
+        {canEnter ? (
+          <Button size="sm" variant="subtle">
+            Enter
+          </Button>
+        ) : (
+          <Button size="sm">Join group</Button>
+        )}
       </Card.Footer>
     </Card.Root>
   );

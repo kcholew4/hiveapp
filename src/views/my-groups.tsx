@@ -1,14 +1,34 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Spinner } from "@chakra-ui/react";
 import { GroupCard } from "../components";
-import { groups } from "../mocks";
-
+import { IoIosAdd } from "react-icons/io";
+import { useNavigate } from "react-router";
+import { useMyGroups } from "../hooks";
+import { useSession } from "../contexts";
+import { toaster } from "../ui";
 export const MyGroups = () => {
+  const navigate = useNavigate();
+  const { uid } = useSession();
+  const { groups, isLoading } = useMyGroups(uid, {
+    onError: () =>
+      toaster.error({ description: "There was an error fetching groups" }),
+  });
+
+  if (isLoading) {
+    return <Spinner size="md" />;
+  }
+
   return (
     <Box>
-      <Heading>My Groups</Heading>
+      <Flex justify="space-between">
+        <Heading>My Groups</Heading>
+        <Button variant="outline" onClick={() => navigate("/create-group")}>
+          <IoIosAdd />
+          Add
+        </Button>
+      </Flex>
       <Box spaceY={4} mt={6}>
-        {groups.slice(0, 2).map(({ id, title, description }) => (
-          <GroupCard key={id} title={title} description={description} />
+        {groups.map(({ id, name, description }) => (
+          <GroupCard key={id} name={name} description={description} canEnter />
         ))}
       </Box>
     </Box>

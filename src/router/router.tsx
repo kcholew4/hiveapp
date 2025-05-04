@@ -1,5 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router";
-import { LandingPage, SignUp, Dashboard, MyGroups, NewGroups } from "../views";
+import {
+  LandingPage,
+  SignUp,
+  Dashboard,
+  MyGroups,
+  NewGroups,
+  CreateGroup,
+} from "../views";
 import { ProtectedView } from "./protected-view";
 
 export const Router = () => {
@@ -29,6 +36,14 @@ export const Router = () => {
           element={
             <ProtectedView>
               <NewGroups />
+            </ProtectedView>
+          }
+        />
+        <Route
+          path="/create-group"
+          element={
+            <ProtectedView>
+              <CreateGroup />
             </ProtectedView>
           }
         />

@@ -20,7 +20,7 @@ export const LoggedInLayout = ({ children }: LoggedInLayoutProps) => {
 
   return (
     <Box>
-      <Flex justify="space-between" align="center" mb={4}>
+      <Flex justify="space-between" align="center" mb={6}>
         <Button
           variant="plain"
           px={0}

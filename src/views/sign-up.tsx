@@ -23,7 +23,7 @@ export const SignUp = () => {
   const [password, setPassword] = useState("");
 
   const { signUp, isLoading: isCredentialsLoading } = useCredentialsSignUp({
-    onSuccess: () => navigate("/profile-details"),
+    onSuccess: () => navigate("/dashboard"),
     onEmailInUse: () =>
       toaster.create({
         type: "error",
@@ -37,7 +37,7 @@ export const SignUp = () => {
   });
 
   const { logInWithGoogle, isLoading: isGoogleLoading } = useGoogleLogIn({
-    onSuccess: () => navigate("/profile-details"),
+    onSuccess: () => navigate("/dashboard"),
     onError: () =>
       toaster.create({
         type: "error",

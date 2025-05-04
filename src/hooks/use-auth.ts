@@ -6,8 +6,12 @@ import {
   signInWithPopup,
   User,
 } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { useEffect, useState } from "react";
+import { doc, setDoc } from "firebase/firestore";
+
+const createUserDocument = (uid: string, email: string) =>
+  setDoc(doc(db, "users", uid), { email }, { merge: true });
 
 export const useCredentialsSignUp = ({
   onSuccess,
@@ -24,13 +28,14 @@ export const useCredentialsSignUp = ({
     setIsLoading(true);
 
     createUserWithEmailAndPassword(auth, email, password)
+      .then(({ user }) => createUserDocument(user.uid, email))
       .then(onSuccess)
       .catch((error) => {
-        if (error.code === "auth/email-already-in-use") {
-          return onEmailInUse();
+        if (error?.code === "auth/email-already-in-use") {
+          onEmailInUse();
+        } else {
+          onError();
         }
-
-        onError();
       })
       .finally(() => setIsLoading(false));
   };
@@ -82,6 +87,7 @@ export const useGoogleLogIn = ({
     const provider = new GoogleAuthProvider();
 
     signInWithPopup(auth, provider)
+      .then(({ user }) => createUserDocument(user.uid, user.email ?? ``))
       .then(onSuccess)
       .catch(onError)
       .finally(() => setIsLoading(false));
@@ -95,7 +101,11 @@ export const useCurrentUser = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(
-    () => (setIsLoading(false), onAuthStateChanged(auth, setCurrentUser)),
+    () =>
+      onAuthStateChanged(
+        auth,
+        (user) => (setCurrentUser(user), setIsLoading(false))
+      ),
     []
   );
 
