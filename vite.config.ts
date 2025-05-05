@@ -5,6 +5,9 @@ import react from "@vitejs/plugin-react";
 // https://vitejs.dev/config/
 export default defineConfig({
   base: "/hiveapp/",
+  define: {
+    __CREDENTIALS_DISABLED__: true,
+  },
   plugins: [
     react(),
     VitePWA({

@@ -16,3 +16,9 @@ export interface Group {
   description: string;
   members: string[];
 }
+
+export type Post = {
+  id: string;
+  content: string;
+  groupId: string;
+};

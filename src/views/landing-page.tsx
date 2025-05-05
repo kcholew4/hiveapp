@@ -8,6 +8,7 @@ import {
   Separator,
   Text,
   Image,
+  Alert,
 } from "@chakra-ui/react";
 import { Form, toaster } from "../ui";
 import { useState } from "react";
@@ -65,12 +66,19 @@ export const LandingPage = () => {
         }}
         mt={5}
       >
+        {__CREDENTIALS_DISABLED__ && (
+          <Alert.Root status="warning" my={4}>
+            <Alert.Indicator />
+            <Alert.Title>Using credentials is currently disabled</Alert.Title>
+          </Alert.Root>
+        )}
         <Input
           value={email}
           placeholder="Email"
           onChange={(e) => setEmail(e.target.value)}
         />
         <Input
+          type="password"
           value={password}
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
