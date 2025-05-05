@@ -3,13 +3,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBKVpiHIxPC2p_CjLvlz1WSgkuN4FBDEFU",
-  authDomain: "hiveapp-6ab9d.firebaseapp.com",
-  projectId: "hiveapp-6ab9d",
-  storageBucket: "hiveapp-6ab9d.firebasestorage.app",
-  messagingSenderId: "317176331046",
-  appId: "1:317176331046:web:ef574af3eb2715324edfe7",
-  measurementId: "G-6PCSYS7RCL",
+  apiKey: "AIzaSyATAU7wf6YSIXZH7nwrtUtE1wuG6I8JIFo",
+  authDomain: "social-app-6a90f.firebaseapp.com",
+  projectId: "social-app-6a90f",
+  storageBucket: "social-app-6a90f.firebasestorage.app",
+  messagingSenderId: "333273719570",
+  appId: "1:333273719570:web:8abcec271fa7cad21989cb",
 };
 
 export const app = initializeApp(firebaseConfig);

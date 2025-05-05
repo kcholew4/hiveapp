@@ -1,8 +1,11 @@
 import {
   addDoc,
+  arrayUnion,
   collection,
+  doc,
   onSnapshot,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { db, Group } from "../firebase";
@@ -29,7 +32,7 @@ export const useCreateGroup = ({
     setIsLoading(true);
     addDoc(collection(db, "groups"), { name, description, members: [userId] })
       .then((group) => onSuccess(group.id))
-      .catch(() => onError())
+      .catch((error) => (console.log(error), onError()))
       .finally(() => setIsLoading(false));
   };
 
@@ -65,7 +68,8 @@ export const useMyGroups = (
         onError();
       }
     );
-  }, [uid, onError]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uid]);
 
   return { groups, isLoading };
 };
@@ -91,7 +95,63 @@ export const useGroups = ({ onError }: { onError: () => void }) => {
         onError();
       }
     );
-  }, [onError]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return { groups, isLoading };
+};
+
+export const useJoinGroup = ({
+  onSuccess,
+  onError,
+}: {
+  onSuccess: (groupId: string) => void;
+  onError: () => void;
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const joinGroup = async (uid: string, groupId: string) => {
+    setIsLoading(true);
+    updateDoc(doc(db, "groups", groupId), {
+      members: arrayUnion(uid),
+    })
+      .then(() => onSuccess(groupId))
+      .catch(() => onError())
+      .finally(() => setIsLoading(false));
+  };
+
+  return { joinGroup, isLoading };
+};
+
+export const useGroupDetails = (
+  id: string,
+  { onError }: { onError: () => void }
+) => {
+  const [group, setGroup] = useState<Group | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!id) {
+      setIsLoading(false);
+      return;
+    }
+
+    return onSnapshot(
+      doc(db, "groups", id),
+      (snapshot) => {
+        if (snapshot.exists()) {
+          setGroup({
+            id: snapshot.id,
+            ...(snapshot.data() as Omit<Group, "id">),
+          });
+        }
+
+        setIsLoading(false);
+      },
+      onError
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  return { group, isLoading };
 };

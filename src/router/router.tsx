@@ -6,6 +6,7 @@ import {
   MyGroups,
   NewGroups,
   CreateGroup,
+  GroupDetails,
 } from "../views";
 import { ProtectedView } from "./protected-view";
 
@@ -44,6 +45,14 @@ export const Router = () => {
           element={
             <ProtectedView>
               <CreateGroup />
+            </ProtectedView>
+          }
+        />
+        <Route
+          path="/groups/:id"
+          element={
+            <ProtectedView>
+              <GroupDetails />
             </ProtectedView>
           }
         />

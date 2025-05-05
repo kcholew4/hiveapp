@@ -4,3 +4,4 @@ export * from "./my-groups";
 export * from "./new-groups";
 export * from "./landing-page";
 export * from "./create-group";
+export * from "./group-details";

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { useMyGroups } from "../hooks";
 import { useSession } from "../contexts";
 import { toaster } from "../ui";
+
 export const MyGroups = () => {
   const navigate = useNavigate();
   const { uid } = useSession();
@@ -19,7 +20,7 @@ export const MyGroups = () => {
 
   return (
     <Box>
-      <Flex justify="space-between">
+      <Flex justify="space-between" align="center">
         <Heading>My Groups</Heading>
         <Button variant="outline" onClick={() => navigate("/create-group")}>
           <IoIosAdd />
@@ -28,7 +29,13 @@ export const MyGroups = () => {
       </Flex>
       <Box spaceY={4} mt={6}>
         {groups.map(({ id, name, description }) => (
-          <GroupCard key={id} name={name} description={description} canEnter />
+          <GroupCard
+            key={id}
+            name={name}
+            description={description}
+            canEnter
+            onEnter={() => navigate(`/groups/${id}`)}
+          />
         ))}
       </Box>
     </Box>
