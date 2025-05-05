@@ -6,17 +6,52 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import { useEffect, useState } from "react";
-import { Post } from "../firebase";
+import { useState, useEffect } from "react";
+import { Post, FirestorePostType } from "../firebase/types";
+import { uploadMedia } from "../helpers";
 
 export const useCreatePost = ({ onError }: { onError: () => void }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const createPost = async (groupId: string, content: string) => {
+  const createPost = async (
+    groupId: string,
+    type: FirestorePostType,
+    content: string | { lat: number; lng: number } | File | Blob
+  ) => {
     setIsLoading(true);
-    addDoc(collection(db, "posts"), { groupId, content })
-      .catch(onError)
-      .finally(() => setIsLoading(false));
+    try {
+      let storedContent: string | { lat: number; lng: number } = "";
+
+      if (type === "TEXT") {
+        if (typeof content !== "string" || !content.trim()) {
+          setIsLoading(false);
+          return;
+        }
+        storedContent = content.trim();
+      }
+
+      if (type === "IMAGE" && content instanceof File) {
+        storedContent = await uploadMedia(groupId, content, "jpg");
+      }
+
+      if (type === "SOUND" && content instanceof Blob) {
+        storedContent = await uploadMedia(groupId, content, "webm");
+      }
+
+      if (type === "LOCATION" && typeof content === "object") {
+        storedContent = content as { lat: number; lng: number };
+      }
+
+      await addDoc(collection(db, "posts"), {
+        groupId,
+        type,
+        content: storedContent,
+      });
+    } catch {
+      onError();
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return { createPost, isLoading };
@@ -31,15 +66,14 @@ export const useGroupPosts = (
 
   useEffect(() => {
     const q = query(collection(db, "posts"), where("groupId", "==", groupId));
-
     return onSnapshot(
       q,
-      (snapshot) => {
-        const data = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...(doc.data() as Omit<Post, "id">),
-        }));
-        setPosts(data);
+      (snap) => {
+        const docs = snap.docs.map((d) => ({
+          id: d.id,
+          ...(d.data() as Omit<Post, "id">),
+        })) as Post[];
+        setPosts(docs);
         setIsLoading(false);
       },
       () => {

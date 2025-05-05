@@ -10,6 +10,8 @@ export interface UserProfile {
   bio: string;
 }
 
+export type FirestorePostType = "TEXT" | "IMAGE" | "SOUND" | "LOCATION";
+
 export interface Group {
   id: string;
   name: string;
@@ -17,8 +19,30 @@ export interface Group {
   members: string[];
 }
 
-export type Post = {
+interface PostBase {
   id: string;
-  content: string;
   groupId: string;
-};
+  type: FirestorePostType;
+}
+
+export interface TextPost extends PostBase {
+  type: "TEXT";
+  content: string;
+}
+
+export interface ImagePost extends PostBase {
+  type: "IMAGE";
+  content: string;
+}
+
+export interface SoundPost extends PostBase {
+  type: "SOUND";
+  content: string;
+}
+
+export interface LocationPost extends PostBase {
+  type: "LOCATION";
+  content: { lat: number; lng: number };
+}
+
+export type Post = TextPost | ImagePost | SoundPost | LocationPost;
