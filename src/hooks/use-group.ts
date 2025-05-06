@@ -5,6 +5,7 @@ import {
   doc,
   onSnapshot,
   query,
+  runTransaction,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -154,4 +155,44 @@ export const useGroupDetails = (
   }, [id]);
 
   return { group, isLoading };
+};
+
+export const useLeaveGroup = ({
+  onSuccess,
+  onError,
+}: {
+  onSuccess: () => void;
+  onError: () => void;
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const leaveGroup = async (uid: string, groupId: string) => {
+    setIsLoading(true);
+    try {
+      await runTransaction(db, async (trx) => {
+        const ref = doc(db, "groups", groupId);
+        const snap = await trx.get(ref);
+        if (!snap.exists()) throw new Error("Group not found");
+
+        const members = (snap.data().members as string[]).filter(
+          (m) => m !== uid
+        );
+
+        if (members.length === 0) {
+          trx.delete(ref);
+        } else {
+          trx.update(ref, { members });
+        }
+      });
+
+      onSuccess();
+    } catch (e) {
+      console.error(e);
+      onError();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { leaveGroup, isLoading };
 };

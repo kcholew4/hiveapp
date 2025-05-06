@@ -23,6 +23,9 @@ interface PostBase {
   id: string;
   groupId: string;
   type: FirestorePostType;
+  createdBy: string;
+  likedBy: string[];
+  canDelete?: boolean;
 }
 
 export interface TextPost extends PostBase {
