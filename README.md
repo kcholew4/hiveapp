@@ -1,6 +1,6 @@
 ## Prototype
 
-https://www.figma.com/proto/wVNlzyEBpjRbkJVadeUqKo/Untitled?node-id=2-3&p=f&t=lVCGLmmXZnXGiKAM-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=2%3A3
+https://www.figma.com/proto/1MtLPb963tWuPpg9XLn5Ei/HiveApp?node-id=1-4381&p=f&t=MgIE9OvtMvdvhjaR-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A1588
 
 # React + TypeScript + Vite
 
@@ -45,7 +45,7 @@ export default tseslint.config({
     react,
   },
   rules: {
-    // other rules...
+    // other rules..
     // Enable its recommended rules
     ...react.configs.recommended.rules,
     ...react.configs["jsx-runtime"].rules,
